@@ -1,0 +1,56 @@
+" * mucomplete
+" completion sources
+" never omni first, slows down
+" c-p = :help complete 
+setglobal complete-=t
+let g:mucomplete#chains = {}
+let g:mucomplete#chains.default = ['c-n']
+let g:mucomplete#chains.vim = ['c-n', 'cmd'] 
+let g:mucomplete#chains.ruby = ['omni', 'c-n', 'tags']
+let g:mucomplete#chains.html = ['c-n', 'omni']
+let g:mucomplete#chains.elixir=['c-n', 'omni']
+set completeopt+=menuone
+set completeopt+=noselect
+set completeopt+=noinsert
+let g:mucomplete#always_use_completeopt = 1
+let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#smart_enter = 1
+imap <Plug>MyCR <Plug>(MUcompleteCR)
+imap <cr> <Plug>MyCR
+
+" * dirvish
+" sort by file type
+autocmd FileType dirvish sort ,^.*[\/],
+" :CtrlP in dirvish
+autocmd FileType dirvish nnoremap <buffer><silent> <c-p> :CtrlP<cr>
+
+" * airline
+" buffer numbers
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" enable
+let g:airline#extensions#tabline#enabled = 1
+
+" * endwise
+" ctr+j
+" imap <C-J> <CR>
+
+" * syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_html_checkers = ['w3']
+" let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_checkers = [] " to deactivate
+
+"" emmet ""
+let g:user_emmet_leader_key='<C-E>'
+let g:user_emmet_settings={'javascript.jsx': {'extends':'jsx'}}
+
+"" vim-tips ""
+autocmd VimEnter * call Tip()

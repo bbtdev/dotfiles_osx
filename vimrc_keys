@@ -1,0 +1,49 @@
+" KEY MAPPINGS
+" leader
+let mapleader=" "
+
+" windows
+" move cursor on split
+nnoremap <C-w>v :vsplit<CR><C-w>p
+nnoremap <C-w>s :split<CR><C-w>p
+" open big below
+nnoremap <C-w>S :botright sp<CR>
+nnoremap <C-w>V :botright vsplit<CR>
+" window navigation
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
+
+" PLUGINS
+
+" * rails navi
+" ruby/rails
+:nnoremap <leader>ra :call SwitchToRailsSpecAlternate()<cr>
+:nnoremap <leader>rv :call AlternateViewsFolderController()<cr>
+" spec
+:nnoremap <leader>sf :call RunSpecDispatchForFile()<cr>
+:nnoremap <leader>sF :call RunSpecForFile()<cr>
+" :nnoremap <leader>rrf :call RunSpecForFile()<cr>
+
+
+" * CTRLP
+" replace ls with fzf buffers
+:cnoreabbrev ls :CtrlPBuffer
+" replace tags with fzf tags
+:cnoreabbrev tags :CtrlPTag
+
+" TESTING
+:nnoremap <leader>tm :call CreatePaneWithTmuxDefaultDirectory()<cr>
+:nnoremap <leader>tf :call CreatePaneWithCurrentDirectory()<cr>
+:nnoremap <leader>ts :call RunSpecForFileWithDispath()<cr>
+
+:nnoremap <leader>m :call Custom_make()<cr>
+
+" NETRDTREE
+:cnoreabbrev Lex :NERDTreeToggle
+
+" buffer navi
+:nnoremap <leader>l :CtrlPBuffer<CR>
+:nnoremap <leader>b :b#<CR>
+

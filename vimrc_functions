@@ -1,0 +1,50 @@
+" tmux 
+
+fun! DoesPaneAlreadyExists()
+  let panes_list = split(system('tmux list-panes -s -F "#{pane_index}"', "\n"))
+  let panes_count = len(panes_list)
+  if panes_count > 1
+    exec ':echo "' . panes_list[1] . '"'
+    call system('tmux kill-pane -t ' . panes_list[1] )
+  else
+  endif
+endfun
+
+fun! CreatePaneWithCurrentDirectory()
+  call DoesPaneAlreadyExists()
+  call system('tmux split-window -c ' . expand('%:p:h') . '\; resize-pane -x 70 -y 10')
+endfun
+
+fun! CreatePaneWithTmuxDefaultDirectory()
+  call DoesPaneAlreadyExists()
+  call system('tmux split-window \; resize-pane -x 70 -y 10')
+endfun
+
+
+fun! RunSpecForFileWithDispath()
+  let file = GetCurrentFile()
+  if IsCompatibleForSpec(file)
+    let file = GetSpecForFile(file)
+  endif
+  exec ':Dispatch rspec ' . file
+endfunction
+
+fun! Custom_make()
+  let file = GetCurrentFile()
+  let extension =  expand('%:e')
+  write
+
+  let maker = ''
+
+  if extension == 'exs'
+    let maker = 'elixir'
+  elseif extension == 'bash'
+    let maker = 'bash'
+  else
+    let maker = &filetype
+  endif
+
+  if maker != ''
+    exec 'Dispatch ' . maker . ' ' . file
+  endif
+endfun
