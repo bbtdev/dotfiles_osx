@@ -44,13 +44,17 @@ Plug 'Raimondi/delimitMate' " end of delimeters
 " -- tmux --
 Plug 'christoomey/vim-tmux-navigator'
 " -- misc --
-Plug 'tpope/vim-repeat' " extends repeat functionality
+" Plug 'tpope/vim-repeat' " extends repeat functionality
 Plug 'troydm/zoomwintab.vim' " zoom buffer
 Plug 'tpope/vim-surround' " extends change functionality
 Plug 'junegunn/goyo.vim' " reader mode
 " -- themes --
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'arcticicestudio/nord-vim'
+
+" * TESTING *
+" ===========
+
 
 call plug#end()
 
@@ -77,12 +81,20 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 colorscheme nord
 
 " ***********
+" * TESTING *
+" ***********
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" ***********
 " * PLUGINS *
 " ***********
 "
 " * ale *
 " =======
-let g:ale_open_list = 1
+let g:ale_open_list = 0
 "
 " * LSP *
 " =======
@@ -121,6 +133,11 @@ autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
 " -- replace built-in functions
 :cnoreabbrev ls :Buffers
 :cnoreabbrev tags :Tags
+
+" * NerdTree *
+" ============
+" -- replace built-in functions
+:cnoreabbrev Lex :NERDTreeToggle
 
 
 " ********
