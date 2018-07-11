@@ -2,7 +2,7 @@
 " * INSTALLED PLUGINS *
 " *********************
 "
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " * Language support *
 " ====================
@@ -80,6 +80,9 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " -- theme --
 colorscheme nord
 
+" set number
+set relativenumber
+
 " ***********
 " * TESTING *
 " ***********
@@ -103,8 +106,8 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_autoStop = 0
 " -- server --
 let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['tcp://localhost:7658'] 
-    \ }
+            \ 'ruby': [ 'solargraph',  'stdio' ],
+            \ }
 " -- keys --
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
@@ -176,3 +179,4 @@ map <leader>p :FZFMru<cr>
 " -- deoplete --
 "  --- tab complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
