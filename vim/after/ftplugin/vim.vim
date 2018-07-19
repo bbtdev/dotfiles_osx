@@ -25,6 +25,7 @@ setlocal textwidth=80
 " -> Folding
 
 setlocal foldmethod=marker 
+set formatoptions=tcqj
 
 
 

@@ -1,9 +1,10 @@
-" ==============================================================================
-" => 
-" ==============================================================================
+" TODO
+" - own linters
+" - proper K for ruby
 
-"
+" => Settings {{{
 
+" -> Neovim inspired {{{
 
 "" ~ fillchars
 "" ~ fsync
@@ -61,18 +62,12 @@ set incsearch
 " always show status line
 set laststatus=2
 
-" --> Format
-
-
-
 " options for vim sessions
 " 'options' - options and mappings
 set sessionoptions-=options
 
-
 " show (partial) command
 set showcmd
-
 
 " maximum number of tabs to be open on -p or :tab all
 set tabpagemax=50
@@ -83,9 +78,10 @@ set ttyfast
 " enhanced wildmenu completion
 set wildmenu
 
+" }}}
 
 	
-" MINE
+" -> General {{{
 " set omni completion
 set omnifunc=syntaxcomplete#Complete
 
@@ -106,8 +102,6 @@ set shiftwidth=2
 
 " enable mouse for all modes
 set mouse=a
-
-
 
 augroup universal
   autocmd!
@@ -151,111 +145,55 @@ set relativenumber
 set numberwidth=1
 
 
-" Mapping ideas
-nnoremap g/ :nohlsearch<CR>
+" splitting
+" split in the opposite direction
+set splitright
+set splitbelow
 
-" buffer
-nnoremap gl :ls<CR>:b<Space>
-nnoremap gb :b#<CR>
-
-" tAb
-" CTRW a(tAb)(Split)
-nnoremap <C-w>as :tab split<CR>
-" CTRLW an
-nnoremap <C-w>an :tabnew<CR>
-nnoremap <C-w>ac :tabclose<CR>
-nnoremap <C-w>ae :tabnew \|:terminal ++curwin<CR>
-
-" tErminal
-nnoremap <C-w>E :terminal ++curwin<CR>
+" }}}
+" }}}
 
 
+" => Mappings
 
-"Quiting ZZ - :x\:wq | ZQ -q! 
-" zq -:q
-" Zw -:w
+" -> Catalog {{{
 
+" --> Empty
 
-
-
-
-"
-" ==> Remapple keys
-"
-" ===> Empty
 " gb gc gl gy gz
 " zp zy, zq
 " Z(all - Z, Q)
 " CTRL-W a,e, m,u, 
 
+" --> Duplicates
 
-"
+" n CTRL-h                 | mapped to: 
+" n CTRL-j                 | mapped to: 
+" n CTRL-k                 | mapped to: 
+" n CTRL-n                 | mapped to: 
+" n CTRL-p                 | mapped to: 
+" n <Right>                | mapped to: 
+" n <Left>                 | mapped to: 
+" n <Up>                   | mapped to: 
+" n <Down>                 | mapped to: 
+" n <BS>                   | mapped to: 
+" n <CR>/<CTRL-M>/+        | mapped to: 
+" n <Space>                | mapped to: 
 
-"
-" ===> Duplicates
-"
-
-" Mappings that are duplicates for more convenient/popular mappings
-
-" n CTRL-h
-" mapped to: 
-
-" n CTRL-j
-" mapped to: 
-
-" n CTRL-k
-" mapped to: 
-
-" n CTRL-n
-" mapped to: 
-
-" n CTRL-p
-" mapped to: 
-
-" n <Right>
-" mapped to: 
-
-" n <Left>
-" mapped to: 
-
-" n <Up>
-" mapped to: 
-
-" n <Down>
-" mapped to: 
-
-" n <BS>
-" mapped to: 
-
-" n <CR>/<CTRL-M>/+
-" mapped to: 
-
-" n <Space>
-" mapped to: 
-
-
-"
-" ===> Useless mapping
-"
-
-" Mappings that are generally considerable useless/usefull in niche situations/unpopular
+" --> Useless mapping
 
 " n -
 " info: [count] lines upward, on the first non-blank character |linewise|.
-
+" -----------
 " gs
 " info: sleep
-
+" -----------
 " when wrap is off
 " zh
 " zl
+" -----------
 
-
-"
-" ===> Usefull commands not mapped
-"
-
-" Commands that are generally considerared usefull, but are not mapped
+" --> Unmapped but usefull
 
 " quiting
 " :q
@@ -263,14 +201,17 @@ nnoremap <C-w>E :terminal ++curwin<CR>
 " :qa!
 " :wqa
 " :wqa!
+" :confirm quitall
 
 ":nohlsearch 
  " info: stops highlighting of search
+":set relativenumber!|set number!
+" ignore case
+" redraw!
 
 " folding
 " setlocal foldmethod
 " setlocal foldlevel
-
 
 ":tabedit
 ":tab split
@@ -297,7 +238,37 @@ nnoremap <C-w>E :terminal ++curwin<CR>
 "copen
 "cclose
 
-" q
-":qa
-":confirm quitall
-":qa!
+" }}}
+
+" -> Mapping ideas
+
+" Quitting/Writing
+" for writing and ! all caps
+" q - q
+" Z - wq
+" a - all
+" w - w
+" capital - !
+
+" Buffers
+nnoremap gl :ls<CR>:b<Space>
+nnoremap gb :b#<CR>
+
+" Tabs
+" CTRW a(tAb)(Split)
+nnoremap <C-w>as :tab split<CR>
+" CTRLW an
+nnoremap <C-w>an :tabnew<CR>
+nnoremap <C-w>ac :tabclose<CR>
+nnoremap <C-w>ae :tabnew \|:terminal ++curwin<CR>
+
+" Terminal
+nnoremap <C-w>E :terminal ++curwin<CR>
+
+" Misc
+nnoremap z/ :nohlsearch<CR>
+
+
+
+
+
