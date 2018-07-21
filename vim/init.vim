@@ -1,3 +1,57 @@
+" TODO
+" - " check 'set clipboard'; bind D-c D-v D-x based on mode "
+" - " check 'set paste' "
+" - " create linters "
+" - " create session management "
+
+" Rules:
+" taken from vimrc review threads
+" checklist: https://www.reddit.com/r/vim/wiki/vimrctips
+" - " don't change tabstop https://www.reddit.com/r/vim/wiki/tabstop "
+" - " 'clipboard^=' instead of '=', is more portable "
+" - " don't use smartindent "
+" - " 'filetype plugin indent on' - has to be set after loading plugins "
+" - " wrap your autocmds in proper self-clearing augroups "
+" - " 'set nocompatible' is usefull only when '-u', to avoid this use '-Nu' "
+" - " be specific in your mappings. nmap vs map "
+" - " avoid recursive mappings. nmap vs nnoremap "
+" - " don't 'set t_Co=256'; set up your terminal properly instead "
+" - " in scripts 'normal' should always be used as 'normal!' "
+" - " allow your functions to abort "
+" - " do not use 'source', use 'runtime' "
+" - " use long names to help readability: 'highlight' vs 'hi' "
+" - " 'set background' should be set by your colorscheme "
+" - " moving your custom functions to 'autoload/' "
+" - " move filetype-specific settings to 'after/ftplugin/' "
+" - " /\v breaks some plugins "
+" - " 'cursorline' and 'cursorcolumn' are documented as slow "
+" - " '~/.vim/' and '$HOME/.vim/' are not portable "
+" - " 'vnoremap' covers visual and select, for visual use 'xnoremap' "
+
+" Content:
+" ===============================================================================
+" " Plugins "
+" ===============================================================================
+" " Settings "
+" ------------------------------------------------------------------------------
+" " - Nvim Defaults "
+" " - General "
+" " - Autogroup "
+" ===============================================================================
+" " Mappings "
+" ------------------------------------------------------------------------------
+" " - Catalog "
+" " - Extended "
+" ===============================================================================
+" " Testing "
+" ------------------------------------------------------------------------------
+" " - Plugin Settings "
+" " - General Settings "
+" " - Functions "
+" " - Mappings "
+" ===============================================================================
+
+
 " ==============================================================================
 " Plugins: {{{ 
 " ==============================================================================
@@ -38,10 +92,19 @@ if dein#load_state('/Users/bogdan/.cache/dein')
   " Autocomplete:
   " ============================================================================
   call dein#add('Shougo/deoplete.nvim')
+  " deoplete sources
+  call dein#add('Shougo/neco-vim')
+
 
   " Snippets:
   " ============================================================================
   call dein#add('SirVer/ultisnips')
+
+  " Testing:
+  " ============================================================================
+  call dein#add('/usr/local/opt/fzf')
+  call dein#add('junegunn/fzf.vim')
+
 
   call dein#end()
   call dein#save_state()
@@ -141,12 +204,29 @@ endif
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
+" Settings " Theme: {{{
+" ------------------------------------------------------------------------------
+
+" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
+augroup Theming
+  autocmd!
+  " hlsearch colors
+  autocmd ColorScheme * highlight Search ctermbg=LightGray
+  autocmd ColorScheme * highlight Search ctermfg=Black
+augroup END
+
+" molokai solarized
+colorscheme molokai
+" ------------------------------------------------------------------------------
+" Settings " Theme }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " Settings " General: {{{
 " ------------------------------------------------------------------------------
 
-" theme
-color molokai
-" colors solarized
+" also use system register
+set clipboard^=unnamed
 
 " set omni completion
 set omnifunc=syntaxcomplete#Complete
@@ -157,10 +237,9 @@ set hidden
 " set path to current directory and all directories under it
 set path=$PWD/**
 
-" number of spaces for <Tab>
-set tabstop=2
-" in 'Insert' <Tab> inserts spaces
-set expandtab
+" tab
+" number of spaces for Tab when editing
+set softtabstop=2
 " number of spaces to use for (auto)ident
 set shiftwidth=2
 
@@ -209,9 +288,10 @@ set splitbelow
 " ------------------------------------------------------------------------------
 
 " ------------------------------------------------------------------------------
-" Settings " Override Autogroup: {{{
+" Settings " Autogroup: {{{
 " ------------------------------------------------------------------------------
-augroup override
+augroup MainAutogroup
+ " Remove all auto-commands from the current autogroup
   autocmd!
 
   " formatoptions
@@ -222,9 +302,8 @@ augroup override
   " 'j'         - remove comment leader when joining lines
   autocmd FileType * set formatoptions=tcqj
 
-  " hlsearch colors
-  autocmd ColorScheme * highlight Search ctermbg=LightRed
-  autocmd ColorScheme * highlight Search ctermfg=Blue
+  " source vim config after saving it
+  autocmd BufWrite $MYVIMRC nested source $MYVIMRC
 augroup END
 
 " ------------------------------------------------------------------------------
@@ -240,6 +319,39 @@ augroup END
 " ==============================================================================
 
 " ------------------------------------------------------------------------------
+" Mappings " Catalog: {{{
+" ------------------------------------------------------------------------------
+
+" Empty:
+" g '+' b, c, l, y, z
+" z '+' p, y, q
+" Z '-' Z, Q
+" CTRL-W '+' a, e, m, u
+
+" Duplicates:
+" n CTRL-h                 | mapped to: 
+" n CTRL-j                 | mapped to: 
+" n CTRL-k                 | mapped to: 
+" n CTRL-n                 | mapped to: 
+" n CTRL-p                 | mapped to: 
+" n <Right>                | mapped to: 
+" n <Left>                 | mapped to: 
+" n <Up>                   | mapped to: 
+" n <Down>                 | mapped to: 
+" n <BS>                   | mapped to: 
+" n <CR>/<CTRL-M>/+        | mapped to: 
+" n <Space>                | mapped to: 
+
+" Uncommonly:
+" n -
+" n gs
+" n zh, zl
+
+" ------------------------------------------------------------------------------
+" Mappings " Catalog }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
 " Mappings " Extended: {{{
 " ------------------------------------------------------------------------------
 
@@ -247,7 +359,6 @@ augroup END
 " " Rules "
 " - if (w & !) use capital letters
 " - q => q; Z => wq; a => all; w => w
-
 " " :q "
 nnoremap ZAQ :qa!<CR>
 nnoremap Zaq :qa<CR>
@@ -258,8 +369,10 @@ nnoremap ZaZ :wqa<CR>
 " " :w "
 nnoremap Zw :w<CR>
 nnoremap ZW :w!<CR>
+nnoremap Zaw :wa<CR>
+nnoremap ZAW :wa!<CR>
 
-" Misc:
+" Unmapped:
 nnoremap z/ :nohlsearch<CR>
 
 " ------------------------------------------------------------------------------
@@ -337,7 +450,7 @@ let g:deoplete#enable_at_startup = 1
 " ALE:
 " " linters setup "
 let g:ale_linters = {
-      \ 'elixir': ['credo', 'dialyxir'],
+      \ 'elixir': ['credo'],
       \ }
 
 " " Neomake: {{{
