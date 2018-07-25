@@ -1,8 +1,18 @@
-" TODO
-" - " check 'set clipboard'; bind D-c D-v D-x based on mode "
+" TODO " check 'set clipboard'; bind D-c D-v D-x based on mode "
 " - " check 'set paste' "
 " - " create linters "
 " - " create session management "
+" - " custom welcome message "
+" - " replace grep "
+" - " implement project folder functionality "
+" - " set autowrite? "
+" - " set autoread? "
+" - " matching brackets etc "
+" - " auto add end "
+" - " show register when pasting functionality "
+" - " fix <Esc> when pumvisible. Map to C-y<Esc>? "
+" - " learn what <exp> does "
+" - " <Leader>f and implement the rest of FZF commands "
 
 " Rules:
 " taken from vimrc review threads
@@ -87,7 +97,6 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Searching:
   " =============================================================================
-  call dein#add('Shougo/denite.nvim') 
 
   " Autocomplete:
   " ============================================================================
@@ -98,10 +107,14 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Snippets:
   " ============================================================================
+  " necessary for deoplete elixir-ls snippets completion
   call dein#add('SirVer/ultisnips')
 
   " Testing:
   " ============================================================================
+  call dein#add('wikitopian/hardmode')
+  call dein#add('qstrahl/vim-dentures')
+  call dein#add('tpope/vim-endwise')
   call dein#add('/usr/local/opt/fzf')
   call dein#add('junegunn/fzf.vim')
 
@@ -225,6 +238,13 @@ colorscheme molokai
 " Settings " General: {{{
 " ------------------------------------------------------------------------------
 
+" persistent undo
+set undofile
+
+" Searching
+set ignorecase " ignore case
+set smartcase  " ignore case unless capital letters
+
 " also use system register
 set clipboard^=unnamed
 
@@ -303,7 +323,7 @@ augroup MainAutogroup
   autocmd FileType * set formatoptions=tcqj
 
   " source vim config after saving it
-  autocmd BufWrite $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END
 
 " ------------------------------------------------------------------------------
@@ -322,13 +342,15 @@ augroup END
 " Mappings " Catalog: {{{
 " ------------------------------------------------------------------------------
 
-" Empty:
+" Unmapped Keys:
 " g '+' b, c, l, y, z
 " z '+' p, y, q
 " Z '-' Z, Q
+" yo
 " CTRL-W '+' a, e, m, u
+" CTRL- k, q
 
-" Duplicates:
+" Duplicates Keys:
 " n CTRL-h                 | mapped to: 
 " n CTRL-j                 | mapped to: 
 " n CTRL-k                 | mapped to: 
@@ -342,10 +364,17 @@ augroup END
 " n <CR>/<CTRL-M>/+        | mapped to: 
 " n <Space>                | mapped to: 
 
-" Uncommonly:
+" Rarely Used Keys:
 " n -
 " n gs
 " n zh, zl
+" n [m, ]m => function navi for Java-like syntax langs
+" n [/ => cursos the C comment
+
+" Unmapped Usefull Functionalities:
+" :nohlsearch " MAPPED
+" :ls " MAPPED
+" :Explore
 
 " ------------------------------------------------------------------------------
 " Mappings " Catalog }}}
@@ -374,7 +403,7 @@ nnoremap ZAW :wa!<CR>
 
 " Unmapped:
 nnoremap z/ :nohlsearch<CR>
-
+nnoremap gb :ls<CR>:b 
 " ------------------------------------------------------------------------------
 " Mappings " Extended }}}
 " ------------------------------------------------------------------------------
@@ -390,44 +419,6 @@ nnoremap z/ :nohlsearch<CR>
 " ------------------------------------------------------------------------------
 " Testing " Plugin Settings: {{{
 " ------------------------------------------------------------------------------
-
-" " Vim_lsp: {{{
-" " " LSPs setup "
-" " " * elixir "
-" if executable('elixir-ls')
-"     " pip install python-language-server
-"     au User lsp_setup call lsp#register_server({
-"         \ 'name': 'elixir-ls',
-"         \ 'cmd': {server_info->['elixir-ls']},
-"         \ 'whitelist': ['elixir'],
-"         \ 'workspace_config': {'dialyzerEnabled': v:false},
-"         \ })
-" endif
-" " " linting "
-" let g:lsp_signs_enabled = 1
-" let g:lsp_diagnostics_echo_cursor = 1
-" " " logging "
-" let g:lsp_log_verbose = 1
-" let g:lsp_log_file = expand('~/vim-lsp.log')
-" " }}}
-
-" Denite:
-  " " find "
-	call denite#custom#var('file/rec', 'command',
-	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-  " " grep "
-	call denite#custom#var('grep', 'command', ['rg'])
-	call denite#custom#var('grep', 'default_opts',
-				\ ['--vimgrep', '--no-heading'])
-	call denite#custom#var('grep', 'recursive_opts', [])
-	call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-	call denite#custom#var('grep', 'separator', ['--'])
-	call denite#custom#var('grep', 'final_opts', [])
-  "
-  command! -nargs=0 Grep :Denite  grep:::! -updatetime=50
-  command! -nargs=0 Find :Denite -highlight-matched-char=false file/rec
-  command! -nargs=0 Ls   :Denite buffer
-
 
 " Deoplete:
 " " enable "
@@ -453,17 +444,8 @@ let g:ale_linters = {
       \ 'elixir': ['credo'],
       \ }
 
-" " Neomake: {{{
-" " " automatically run at certain events "
-" call neomake#configure#automake('rw', 1000)
-" " " elixir setup "
-" " makers for single file
-" let g:neomake_elixir_enabled_makers = ['mix', 'credo']
-" " markers for not operating on a single file or when no makers are defined
-" " can be called with Neomaker!
-" " hacky need to find a way to call a maker
-" let g:neomake_enabled_makers = ['credo']
-" " }}}
+" FZF:
+let g:fzf_history_dir = '--history=$HOME/.fzf_history'
 
 " ------------------------------------------------------------------------------
 " }}}
@@ -473,14 +455,8 @@ let g:ale_linters = {
 " Testing " General Settings: {{{
 " ------------------------------------------------------------------------------
 
-" Autocomplete:
-
-" popup menu settings
-" menuone  - appear for one match also
-" preview  - show extra information
-" noinsert - no autoinsert matchings
-" set completeopt=menuone,preview,noinsert,noselect
-
+" use ripgrep
+set grepprg=rg\ --vimgrep
 " ------------------------------------------------------------------------------
 " Testing " General Settings }}}
 " ------------------------------------------------------------------------------
@@ -488,96 +464,75 @@ let g:ale_linters = {
 " ------------------------------------------------------------------------------
 " Testing " Functions: {{{
 " ------------------------------------------------------------------------------
-
-" Capture:
-command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-
-function! Redir(cmd)
-	for win in range(1, winnr('$'))
-		if getwinvar(win, 'scratch')
-			execute win . 'windo close'
-		endif
-	endfor
-	if a:cmd =~ '^!'
-		execute "let output = system('" . substitute(a:cmd, '^!', '', '') . "')"
-	else
-		redir => output
-		execute a:cmd
-		redir END
-	endif
-	vnew
-	let w:scratch = 1
-	setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-	call setline(1, split(output, "\n"))
-endfunction
-
-command! -nargs=1 Redir silent call Redir(<f-args>)
-
 " LSP Snippets Fix:
-" function! ExpandLspSnippet()
-"     call UltiSnips#ExpandSnippetOrJump()
-"     if !pumvisible() || empty(v:completed_item)
-"         return ''
-"     endif
+ function! ExpandLspSnippet()
+     call UltiSnips#ExpandSnippetOrJump()
+     if !pumvisible() || empty(v:completed_item)
+         return ''
+     endif
+ 
+     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
+     let l:value = v:completed_item['word']
+     let l:matched = len(l:value)
+     if l:matched <= 0
+         return ''
+     endif
+ 
+     " remove inserted chars before expand snippet
+     if col('.') == col('$')
+         let l:matched -= 1
+         exec 'normal! ' . l:matched . 'Xx'
+     else
+         exec 'normal! ' . l:matched . 'X'
+     endif
+ 
+     if col('.') == col('$') - 1
+         " move to $ if at the end of line.
+         call cursor(line('.'), col('$'))
+     endif
+ 
+     " expand snippet now.
+     call UltiSnips#Anon(l:value)
+     return ''
+ endfunction
+ 
+ imap <C-k> <C-R>=ExpandLspSnippet()<CR>
+
+" " HAS PROBLEMS WITH ESC "
+" " Autocmd LSP Snippet Fix:
+" let g:ulti_expand_res = 0 "default value, just set once
+" function! CompleteSnippet()
+"   if empty(v:completed_item)
+"     return
+"   endif
 " 
-"     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
-"     let l:value = v:completed_item['word']
-"     let l:matched = len(l:value)
-"     if l:matched <= 0
-"         return ''
-"     endif
+"   call UltiSnips#ExpandSnippet()
+"   if g:ulti_expand_res > 0
+"     return
+"   endif
+"   
+"   let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
+"   let l:comp_len = len(l:complete)
 " 
-"     " remove inserted chars before expand snippet
-"     if col('.') == col('$')
-"         let l:matched -= 1
-"         exec 'normal! ' . l:matched . 'Xx'
-"     else
-"         exec 'normal! ' . l:matched . 'X'
-"     endif
+"   let l:cur_col = mode() == 'i' ? col('.') - 2 : col('.') - 1
+"   let l:cur_line = getline('.')
 " 
-"     if col('.') == col('$') - 1
-"         " move to $ if at the end of line.
-"         call cursor(line('.'), col('$'))
-"     endif
+"   let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
+"   let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
 " 
-"     " expand snippet now.
-"     call UltiSnips#Anon(l:value)
-"     return ''
+"   call setline('.', l:start . l:end)
+"   call cursor('.', l:cur_col - l:comp_len + 2)
+" 
+"   call UltiSnips#Anon(l:complete)
 " endfunction
 " 
-" imap <C-k> <C-R>=ExpandLspSnippet()<CR>
-
-" Autocmd LSP Snippet Fix:
-let g:ulti_expand_res = 0 "default value, just set once
-function! CompleteSnippet()
-  if empty(v:completed_item)
-    return
-  endif
-
-  call UltiSnips#ExpandSnippet()
-  if g:ulti_expand_res > 0
-    return
-  endif
-  
-  let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
-  let l:comp_len = len(l:complete)
-
-  let l:cur_col = mode() == 'i' ? col('.') - 2 : col('.') - 1
-  let l:cur_line = getline('.')
-
-  let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
-  let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
-
-  call setline('.', l:start . l:end)
-  call cursor('.', l:cur_col - l:comp_len + 2)
-
-  call UltiSnips#Anon(l:complete)
-endfunction
-
-augroup lsp_snippet_fix
-  autocmd!
-  autocmd CompleteDone * call CompleteSnippet()
-augroup END
+" augroup lsp_snippet_fix
+"   autocmd!
+"   autocmd CompleteDone * call CompleteSnippet()
+" augroup END
+" 
+" Grep
+" command! -nargs=1 -complete=buffer Grep  execute "silent grep! <args>" | copen
 
 " ------------------------------------------------------------------------------
 " Testing " Functions }}}
@@ -591,8 +546,9 @@ augroup END
 nnoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
-" Plugins:
+" nnoremap <Leader>/ :Grep <C-R><C-W><CR>
 
+" Plugins:
 " " LanguageClient_Neovim "
 " menu
 nnoremap <Leader>lm :call LanguageClient_contextMenu()<CR>
@@ -602,19 +558,65 @@ nnoremap <Leader>lk :call LanguageClient#textDocument_hover()<CR>
 nnoremap <Leader>ld :call LanguageClient#textDocument_definition({
       \ 'gotoCmd': 'split',
       \})<CR>
+" " FZF "
+nnoremap <C-p> :FZF<CR>
+nnoremap <Leader>g :Ag<CR>
+nnoremap <Leader>/ :BLines<CR>
+nnoremap <Leader>p :Buffers<CR>
 
-" Autocomplete:
-" inoremap <expr> <Tab> pumvisible() ? "<C-n>" : "<Tab>"
-" inoremap <expr> <Tab> pumvisible() ? "<Down>" : "<Tab>"
-" inoremap <expr> <s-tab> pumvisible()? "<Up>" : "<Tab>"
-" inoremap <expr> <Space> pumvisible()? "<C-Y><Space>" : "<Space>"
-" inoremap <expr> <Esc> pumvisible()? "<C-e>" : "<Esc>"
 
+" Brackets:
+" NAVIGATION
+" " tabs "
+nnoremap [t gT
+nnoremap ]t gt
+nnoremap ]T :tablast<CR>
+nnoremap [T :tabfirst<CR>
+" SWITCHES
+nnoremap [oq :copen<CR>
+nnoremap ]oq :cclose<CR>
+nnoremap [ol :lopen<CR>
+nnoremap ]ol :lclose<CR>
+nnoremap yor :set relativenumber!<CR>
+
+" Folding:
+
+" Terminal:
+tnoremap <Esc> <C-\><C-n>
+
+" Fixes:
+inoremap <expr> <Esc> pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
 " " double enter fix "
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+" incompatible with endwise plugin
+" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+" compatible with endwise
+inoremap <expr> <silent> <CR> <SID>CRFixPuma()
 
+function! s:CRFixPuma()
+  return pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
+endfunction
+
+" " esc fix "
 " ------------------------------------------------------------------------------
 " Testing " Mappings }}}
+" ------------------------------------------------------------------------------
+
+" ------------------------------------------------------------------------------
+" Testing " Autogroup: {{{
+" ------------------------------------------------------------------------------
+
+augroup TestAutogroup
+  autocmd!
+
+  " FZF Esc collides with terminal Esc remap
+  autocmd FileType fzf :tnoremap <buffer> <Esc> <C-g>
+
+  " hardmode enable
+  " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
+augroup END
+
+" ------------------------------------------------------------------------------
+" Testing " Autogroup }}}
 " ------------------------------------------------------------------------------
 
 " ==============================================================================
