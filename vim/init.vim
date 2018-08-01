@@ -13,6 +13,8 @@
 " - " fix <Esc> when pumvisible. Map to C-y<Esc>? "
 " - " learn what <exp> does "
 " - " <Leader>f and implement the rest of FZF commands "
+" - " better clipboard setup "
+" - " check when dirvish introduces tree. Copy functionality from Nerdtree "
 
 " Rules:
 " taken from vimrc review threads
@@ -112,12 +114,16 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Testing:
   " ============================================================================
+  call dein#add('tpope/vim-surround')
   call dein#add('wikitopian/hardmode')
   call dein#add('qstrahl/vim-dentures')
   call dein#add('tpope/vim-endwise')
+  " file exploration
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('jeetsukumaran/vim-filebeagle')
+  " fuzzy
   call dein#add('/usr/local/opt/fzf')
   call dein#add('junegunn/fzf.vim')
-
 
   call dein#end()
   call dein#save_state()
@@ -401,6 +407,10 @@ nnoremap ZW :w!<CR>
 nnoremap Zaw :wa<CR>
 nnoremap ZAW :wa!<CR>
 
+" Windows:
+nnoremap <C-w>V :botright vsplit<CR>
+nnoremap <C-w>S :botright split<CR>
+
 " Unmapped:
 nnoremap z/ :nohlsearch<CR>
 nnoremap gb :ls<CR>:b 
@@ -434,6 +444,7 @@ let g:deoplete#enable_at_startup = 1
  let g:LanguageClient_loadSettings = 1
  let g:LanguageClient_settingsPath =
         \ ".vim/settings.json"
+ let g:LanguageClient_diagnosticsList = "Disabled"
 " " debugging "
  let g:LanguageClient_loggingLevel='DEBUG'
  let g:LanguageClient_loggingFile='/Users/bogdan/Temp/LC.log'
@@ -445,7 +456,19 @@ let g:ale_linters = {
       \ }
 
 " FZF:
-let g:fzf_history_dir = '--history=$HOME/.fzf_history'
+" let g:fzf_history_dir = '--history=$HOME/.fzf_history'
+
+"" Vimfiler:
+"" replace netrw
+"let g:vimfiler_as_default_explorer = 1
+
+" Newtr:
+let g:netrw_banner = 0
+let g:netrw_liststyle= 3
+
+" VimMixFormat:
+
+
 
 " ------------------------------------------------------------------------------
 " }}}
@@ -558,11 +581,34 @@ nnoremap <Leader>lk :call LanguageClient#textDocument_hover()<CR>
 nnoremap <Leader>ld :call LanguageClient#textDocument_definition({
       \ 'gotoCmd': 'split',
       \})<CR>
+
+" Nerdtree:
+nnoremap <Leader>ft :NERDTreeToggle<CR>
+nnoremap <Leader>ff :NERDTreeFind<CR>
+" Filebeagle:
+nnoremap <Leader>fe :FileBeagleBufferDir<CR>
+
 " " FZF "
 nnoremap <C-p> :FZF<CR>
 nnoremap <Leader>g :Ag<CR>
 nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>p :Buffers<CR>
+nnoremap <Leader>h :History<CR>
+
+" " " Vimfiler "
+" nnoremap <Leader>fl :VimFilerExplorer<CR>
+" nnoremap <Leader>fe :Explore<CR>
+" " " Unite "
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" nnoremap <C-p> :Unite<CR>
+" let g:unite_source_rec_async_command =
+"       \ ['ag', '--follow', '--nocolor', '--nogroup',
+"       \  '--hidden', '-g', '']
+" let g:unite_source_grep_command = 'ag'
+" let g:unite_source_grep_default_opts = '-i --vimgrep --nocolor --nogroup --hidden '
+
+" Unmapped:
+xnoremap <Leader>vs :sort<CR>
 
 
 " Brackets:
@@ -572,6 +618,12 @@ nnoremap [t gT
 nnoremap ]t gt
 nnoremap ]T :tablast<CR>
 nnoremap [T :tabfirst<CR>
+" " quickfix "
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+" " loclist "
+nnoremap [l :lprevious<CR>
+nnoremap ]l :lnext<CR>
 " SWITCHES
 nnoremap [oq :copen<CR>
 nnoremap ]oq :cclose<CR>
@@ -580,6 +632,24 @@ nnoremap ]ol :lclose<CR>
 nnoremap yor :set relativenumber!<CR>
 
 " Folding:
+" methods
+nnoremap z;m :setlocal foldmethod=manual<CR>
+nnoremap z;i :setlocal foldmethod=indent<CR>
+nnoremap z;e :setlocal foldmethod=exp<CR>
+nnoremap z;a :setlocal foldmethod=marker<CR>
+nnoremap z;s :setlocal foldmethod=syntax<CR>
+nnoremap z;d :setlocal foldmethod=diff<CR>
+" levels
+nnoremap z;0 :setlocal foldlevel=0<CR>
+nnoremap z;1 :setlocal foldlevel=1<CR>
+nnoremap z;2 :setlocal foldlevel=2<CR>
+nnoremap z;3 :setlocal foldlevel=3<CR>
+nnoremap z;4 :setlocal foldlevel=4<CR>
+nnoremap z;5 :setlocal foldlevel=5<CR>
+nnoremap z;6 :setlocal foldlevel=6<CR>
+nnoremap z;7 :setlocal foldlevel=7<CR>
+nnoremap z;8 :setlocal foldlevel=8<CR>
+nnoremap z;9 :setlocal foldlevel=9<CR>
 
 " Terminal:
 tnoremap <Esc> <C-\><C-n>
