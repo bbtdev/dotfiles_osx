@@ -1,4 +1,5 @@
-" TODO " check 'set clipboard'; bind D-c D-v D-x based on mode "
+" TODO
+" - " check 'set clipboard'; bind D-c D-v D-x based on mode "
 " - " check 'set paste' "
 " - " create linters "
 " - " create session management "
@@ -7,14 +8,32 @@
 " - " implement project folder functionality "
 " - " set autowrite? "
 " - " set autoread? "
-" - " matching brackets etc "
 " - " auto add end "
 " - " show register when pasting functionality "
 " - " fix <Esc> when pumvisible. Map to C-y<Esc>? "
 " - " learn what <exp> does "
-" - " <Leader>f and implement the rest of FZF commands "
 " - " better clipboard setup "
 " - " check when dirvish introduces tree. Copy functionality from Nerdtree "
+" - " special keys for file explorer, finder, unmapped functions "
+" - " pastebin sites "
+" - " fuzzy search (buffer lines) word under cursor "
+" - " highlight(underline) variable automatically when hovering https://www.reddit.com/r/vim/comments/4h3oa2/how_to_automatically_underline_word_under_cursor/"
+" - " mapping for :reg and :put "
+" - " gist for plugin reviews, change the one with file explorers "
+" - " changes and jumps navigation "
+" - " maybe change ale with neomake"
+" - " :Jump function call CTRL-O or CTRL-i if negative or positive"
+" - " :Find a way to navigate :changes list "
+" - " replace tag navigation CTRL - ], CTRL T, CTRL W }, g ] "
+" - " use { } without affecting jump list with g'{, g'} "
+" - " integrate LSP with key bindings "
+" - " better K "
+" - " [* or [/ for navigating comments "
+" - " navigation with [[, ]], m[,]m, [] for multiple languages (inconsistencies
+"   between language support) "
+" - " show lsp tips hover in a baloon check
+"   https://www.reddit.com/r/vim/comments/97v0ix/how_do_people_use_vim_which_does_not_have_ide/e4bbbng/
+"   "
 
 " Rules:
 " taken from vimrc review threads
@@ -73,6 +92,13 @@ if dein#load_state('/Users/bogdan/.cache/dein')
   call dein#begin('/Users/bogdan/.cache/dein')
   call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
 
+  " Functionality Enhancements:
+  " ============================================================================
+  " surround
+  call dein#add('tpope/vim-surround')
+  " commentary
+  call dein#add('tpope/vim-commentary')
+
   " Languages_Support:
   " ============================================================================
   call dein#add('https://github.com/sheerun/vim-polyglot')
@@ -114,7 +140,8 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Testing:
   " ============================================================================
-  call dein#add('tpope/vim-surround')
+  " auto pairing
+  call dein#add('Raimondi/delimitMate')
   call dein#add('wikitopian/hardmode')
   call dein#add('qstrahl/vim-dentures')
   call dein#add('tpope/vim-endwise')
@@ -261,7 +288,7 @@ set omnifunc=syntaxcomplete#Complete
 set hidden
 
 " set path to current directory and all directories under it
-set path=$PWD/**
+set path=$PWD/**,$HOME/dotfiles_osx/**
 
 " tab
 " number of spaces for Tab when editing
@@ -329,7 +356,7 @@ augroup MainAutogroup
   autocmd FileType * set formatoptions=tcqj
 
   " source vim config after saving it
-  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+  autocmd BufWritePost init.vim nested source $MYVIMRC
 augroup END
 
 " ------------------------------------------------------------------------------
@@ -354,7 +381,7 @@ augroup END
 " Z '-' Z, Q
 " yo
 " CTRL-W '+' a, e, m, u
-" CTRL- k, q
+" CTRL- k, _, [
 
 " Duplicates Keys:
 " n CTRL-h                 | mapped to: 
@@ -362,6 +389,7 @@ augroup END
 " n CTRL-k                 | mapped to: 
 " n CTRL-n                 | mapped to: 
 " n CTRL-p                 | mapped to: 
+" n CTRL-i/<Tab>           | mapped to: 
 " n <Right>                | mapped to: 
 " n <Left>                 | mapped to: 
 " n <Up>                   | mapped to: 
@@ -595,6 +623,12 @@ nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>p :Buffers<CR>
 nnoremap <Leader>h :History<CR>
 
+" how to open from fuzzy
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
+
 " " " Vimfiler "
 " nnoremap <Leader>fl :VimFilerExplorer<CR>
 " nnoremap <Leader>fe :Explore<CR>
@@ -610,9 +644,14 @@ nnoremap <Leader>h :History<CR>
 " Unmapped:
 xnoremap <Leader>vs :sort<CR>
 
+" Mix:
+nnoremap zp :registers<CR>:put<Space>
 
 " Brackets:
 " NAVIGATION
+" " buffers "
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
 " " tabs "
 nnoremap [t gT
 nnoremap ]t gt
@@ -651,8 +690,18 @@ nnoremap z;7 :setlocal foldlevel=7<CR>
 nnoremap z;8 :setlocal foldlevel=8<CR>
 nnoremap z;9 :setlocal foldlevel=9<CR>
 
+" Tas:
+nnoremap <C-w>A :tabnew %<CR>
+nnoremap <C-w>ao :tabnew %<CR>
+nnoremap <C-w>an :tabnew<CR>
+nnoremap <C-w>ac :tabclose<CR>
+nnoremap <C-w>ae :tabnew <bar> terminal<CR>
+
 " Terminal:
+" Esc in terminal
 tnoremap <Esc> <C-\><C-n>
+nnoremap <C-w>E :terminal<CR>
+nnoremap <C-w>eo :terminal<CR>
 
 " Fixes:
 inoremap <expr> <Esc> pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
