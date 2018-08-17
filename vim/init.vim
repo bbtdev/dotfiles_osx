@@ -1,24 +1,16 @@
 " TODO
-" - " check 'set clipboard'; bind D-c D-v D-x based on mode "
-" - " check 'set paste' "
 " - " create linters "
 " - " create session management "
 " - " custom welcome message "
 " - " replace grep "
 " - " implement project folder functionality "
-" - " set autowrite? "
-" - " set autoread? "
-" - " auto add end "
-" - " show register when pasting functionality "
 " - " fix <Esc> when pumvisible. Map to C-y<Esc>? "
 " - " learn what <exp> does "
-" - " better clipboard setup "
 " - " check when dirvish introduces tree. Copy functionality from Nerdtree "
 " - " special keys for file explorer, finder, unmapped functions "
 " - " pastebin sites "
 " - " fuzzy search (buffer lines) word under cursor "
 " - " highlight(underline) variable automatically when hovering https://www.reddit.com/r/vim/comments/4h3oa2/how_to_automatically_underline_word_under_cursor/"
-" - " mapping for :reg and :put "
 " - " gist for plugin reviews, change the one with file explorers "
 " - " changes and jumps navigation "
 " - " maybe change ale with neomake"
@@ -110,9 +102,6 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Linting:
   " ============================================================================
-  " call dein#add('neomake/neomake')
-  " * elixir: it does not have dialyzer built-in, but i can be setup
-  " ----------------------------------------------------------------------------
   call dein#add('w0rp/ale')
   " * elixir: does not do syntax checking in elixir
 
@@ -131,7 +120,8 @@ if dein#load_state('/Users/bogdan/.cache/dein')
   call dein#add('Shougo/deoplete.nvim')
   " deoplete sources
   call dein#add('Shougo/neco-vim')
-
+  " auto pairing
+  call dein#add('Raimondi/delimitMate')
 
   " Snippets:
   " ============================================================================
@@ -140,8 +130,6 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Testing:
   " ============================================================================
-  " auto pairing
-  call dein#add('Raimondi/delimitMate')
   call dein#add('wikitopian/hardmode')
   call dein#add('qstrahl/vim-dentures')
   call dein#add('tpope/vim-endwise')
@@ -494,10 +482,6 @@ let g:ale_linters = {
 let g:netrw_banner = 0
 let g:netrw_liststyle= 3
 
-" VimMixFormat:
-
-
-
 " ------------------------------------------------------------------------------
 " }}}
 " ------------------------------------------------------------------------------
@@ -690,7 +674,7 @@ nnoremap z;7 :setlocal foldlevel=7<CR>
 nnoremap z;8 :setlocal foldlevel=8<CR>
 nnoremap z;9 :setlocal foldlevel=9<CR>
 
-" Tas:
+" Tabs:
 nnoremap <C-w>A :tabnew %<CR>
 nnoremap <C-w>ao :tabnew %<CR>
 nnoremap <C-w>an :tabnew<CR>
