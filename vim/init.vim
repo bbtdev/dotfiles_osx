@@ -117,9 +117,9 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Autocomplete:
   " ============================================================================
-  call dein#add('Shougo/deoplete.nvim')
+  " call dein#add('Shougo/deoplete.nvim')
   " deoplete sources
-  call dein#add('Shougo/neco-vim')
+  " call dein#add('Shougo/neco-vim')
   " auto pairing
   call dein#add('Raimondi/delimitMate')
 
@@ -139,6 +139,21 @@ if dein#load_state('/Users/bogdan/.cache/dein')
   " fuzzy
   call dein#add('/usr/local/opt/fzf')
   call dein#add('junegunn/fzf.vim')
+
+  " ncm2
+  call dein#add('ncm2/ncm2')
+  call dein#add('roxma/nvim-yarp')
+  
+  " ncm2 sources
+  call dein#add('ncm2/ncm2-bufword')
+  " ncm2 sources path
+  call dein#add('ncm2/ncm2-path')
+
+  " nc2m sources vim
+  call dein#add('shougo/neco-vim')
+  call dein#add('ncm2/ncm2-vim')
+  " ncrm2 ??
+  call dein#add('ncm2/ncm2-ultisnips')
 
   call dein#end()
   call dein#save_state()
@@ -446,9 +461,57 @@ nnoremap gb :ls<CR>:b
 " Testing " Plugin Settings: {{{
 " ------------------------------------------------------------------------------
 
+" Ncm2:
+augroup Nc2m
+autocmd!
+ autocmd BufEnter * call ncm2#enable_for_buffer()
+augroup END
+
+set completeopt=noinsert,menuone,noselect
+
+" reduce popup flickerign, default: 60
+let g:ncm2#popup_delay = 60
+
+
+
+" UltiSnips+NCM function parameter expansion
+
+" We don't really want UltiSnips to map these two, but there's no option for
+" that so just make it map them to a <Plug> key.
+let g:UltiSnipsExpandTrigger       = "<Plug>(ultisnips_expand_or_jump)"
+let g:UltiSnipsJumpForwardTrigger  = "<Plug>(ultisnips_expand_or_jump)"
+" Let UltiSnips bind the jump backward trigger as there's nothing special
+" about it.
+let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+
+" Try expanding snippet or jumping with UltiSnips and return <Tab> if nothing
+" worked.
+function! UltiSnipsExpandOrJumpOrTab()
+  call UltiSnips#ExpandSnippetOrJump()
+  if g:ulti_expand_or_jump_res > 0
+    return ""
+  else
+    return "\<Tab>"
+  endif
+endfunction
+
+" First try expanding with ncm2_ultisnips. This does both LSP snippets and
+" normal snippets when there's a completion popup visible.
+inoremap <silent> <expr> <Tab> ncm2_ultisnips#expand_or("\<Plug>(ultisnips_try_expand)")
+
+" If that failed, try the UltiSnips expand or jump function. This handles
+" short snippets when the completion popup isn't visible yet as well as
+" jumping forward from the insert mode. Writes <Tab> if there is no special
+" action taken.
+inoremap <silent> <Plug>(ultisnips_try_expand) <C-R>=UltiSnipsExpandOrJumpOrTab()<CR>
+
+" Select mode mapping for jumping forward with <Tab>.
+snoremap <silent> <Tab> <Esc>:call UltiSnips#ExpandSnippetOrJump()<cr>
+
+
 " Deoplete:
 " " enable "
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 
 " LanguageClient_neovim:
 " " LSPs setup "
@@ -500,38 +563,38 @@ set grepprg=rg\ --vimgrep
 " Testing " Functions: {{{
 " ------------------------------------------------------------------------------
 " LSP Snippets Fix:
- function! ExpandLspSnippet()
-     call UltiSnips#ExpandSnippetOrJump()
-     if !pumvisible() || empty(v:completed_item)
-         return ''
-     endif
- 
-     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
-     let l:value = v:completed_item['word']
-     let l:matched = len(l:value)
-     if l:matched <= 0
-         return ''
-     endif
- 
-     " remove inserted chars before expand snippet
-     if col('.') == col('$')
-         let l:matched -= 1
-         exec 'normal! ' . l:matched . 'Xx'
-     else
-         exec 'normal! ' . l:matched . 'X'
-     endif
- 
-     if col('.') == col('$') - 1
-         " move to $ if at the end of line.
-         call cursor(line('.'), col('$'))
-     endif
- 
-     " expand snippet now.
-     call UltiSnips#Anon(l:value)
-     return ''
- endfunction
- 
- imap <C-k> <C-R>=ExpandLspSnippet()<CR>
+" function! ExpandLspSnippet()
+"     call UltiSnips#ExpandSnippetOrJump()
+"     if !pumvisible() || empty(v:completed_item)
+"         return ''
+"     endif
+" 
+"     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
+"     let l:value = v:completed_item['word']
+"     let l:matched = len(l:value)
+"     if l:matched <= 0
+"         return ''
+"     endif
+" 
+"     " remove inserted chars before expand snippet
+"     if col('.') == col('$')
+"         let l:matched -= 1
+"         exec 'normal! ' . l:matched . 'Xx'
+"     else
+"         exec 'normal! ' . l:matched . 'X'
+"     endif
+" 
+"     if col('.') == col('$') - 1
+"         " move to $ if at the end of line.
+"         call cursor(line('.'), col('$'))
+"     endif
+" 
+"     " expand snippet now.
+"     call UltiSnips#Anon(l:value)
+"     return ''
+" endfunction
+" 
+" imap <C-k> <C-R>=ExpandLspSnippet()<CR>
 
 " " HAS PROBLEMS WITH ESC "
 " " Autocmd LSP Snippet Fix:
