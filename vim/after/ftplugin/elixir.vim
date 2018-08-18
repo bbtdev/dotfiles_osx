@@ -32,5 +32,5 @@ augroup Elixir
 
   " help :% :range!
   " - is a is a command-line argument to format that tells it to read from standard input instead of from a file.
-  autocmd BufWritePre <buffer> silent %!mix format -
+  " autocmd BufWritePre <buffer> silent %!mix format -
 augroup END

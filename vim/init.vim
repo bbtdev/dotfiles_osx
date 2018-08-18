@@ -130,6 +130,7 @@ if dein#load_state('/Users/bogdan/.cache/dein')
 
   " Testing:
   " ============================================================================
+  call dein#add('mhinz/vim-mix-format')
   call dein#add('wikitopian/hardmode')
   call dein#add('qstrahl/vim-dentures')
   call dein#add('tpope/vim-endwise')
@@ -460,6 +461,9 @@ nnoremap gb :ls<CR>:b
 " ------------------------------------------------------------------------------
 " Testing " Plugin Settings: {{{
 " ------------------------------------------------------------------------------
+
+" Mix Format:
+let g:mix_format_on_save = 1
 
 " Ncm2:
 augroup Nc2m
