@@ -10,37 +10,37 @@ nnoremap <localleader>tiq :execute ":split <bar> terminal iex -S mix test --trac
 nnoremap <localleader>tilq :execute ":split <bar> terminal iex -S mix test --trace " . 
       \substitute(expand("%"), '[^,]*test/', 'test/', '') . ":" . line(".")<CR>
 
-" "method navigation"
-" def defp test
-nnoremap <silent><buffer> ]] m':call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"bW")<CR>
-nnoremap <silent><buffer> [[ m':call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"W")<CR>
-xnoremap <silent><buffer> [[ m':<C-U>exe "normal! gv"<Bar>call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"W")<CR>
-xnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"bW")<CR>
-
-" end
-nnoremap <silent><buffer> [] m':call search('^\s*end\>', "bW")<CR>
-nnoremap <silent><buffer> ][ m':call search('^\s*end\>', "W")<CR>
-xnoremap <silent><buffer> [] m':<C-U>exe "normal! gv"<Bar>call search('^\s*end\>', "bW")<CR>
-xnoremap <silent><buffer> ][ m':<C-U>exe "normal! gv"<Bar>call search('^\s*end\>', "W")<CR>
-
-" defmodule
-nnoremap <silent><buffer> ]M m':call search('^\s*defmodule\>',"bW")<CR>
-nnoremap <silent><buffer> [M m':call search('^\s*defmodule\>',"W")<CR>
-xnoremap <silent><buffer> ]M m':<C-U>exe "normal! gv"<Bar>call search('^\s*defmodule\>', "bW")<CR>
-xnoremap <silent><buffer> [M m':<C-U>exe "normal! gv"<Bar>call search('^\s*defmodule\>', "W")<CR>
-
-" ... do
-nnoremap <silent><buffer> ]m m':call search('^.*\s\+do\:\=\n', "bW")<CR>
-nnoremap <silent><buffer> [m m':call search('^.*\s\+do\:\=\n', "W")<CR>
-xnoremap <silent><buffer> ]m m':<C-U>exe "normal! gv"<Bar>call search('^.*\s\+do\:\=\n', "bW")<CR>
-" BUG, GOES ON THE SAME LINE BECAUSE OF ^
-xnoremap <silent><buffer> [m m':<C-U>exe "normal! gv"<Bar>call search('^.*\s\+do\:\=\n', "W")<CR>
-
-" fn
-nnoremap <silent><buffer> ]f m':call search('\<fn\>', "bW")<CR>
-nnoremap <silent><buffer> [f m':call search('\<fn\>', "W")<CR>
-xnoremap <silent><buffer> ]f m':<C-U>exe "normal! gv"<Bar>call search('\<fn\>', "bW")<CR>
-xnoremap <silent><buffer> [f m':<C-U>exe "normal! gv"<Bar>call search('\<fn\>', "W")<CR>
+" " "method navigation"
+" " def defp test
+" nnoremap <silent><buffer> ]] m':call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"bW")<CR>
+" nnoremap <silent><buffer> [[ m':call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"W")<CR>
+" xnoremap <silent><buffer> [[ m':<C-U>exe "normal! gv"<Bar>call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"W")<CR>
+" xnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*def\s\\|^\s*defp\\|^\s*test\>',"bW")<CR>
+" 
+" " end
+" nnoremap <silent><buffer> [] m':call search('^\s*end\>', "bW")<CR>
+" nnoremap <silent><buffer> ][ m':call search('^\s*end\>', "W")<CR>
+" xnoremap <silent><buffer> [] m':<C-U>exe "normal! gv"<Bar>call search('^\s*end\>', "bW")<CR>
+" xnoremap <silent><buffer> ][ m':<C-U>exe "normal! gv"<Bar>call search('^\s*end\>', "W")<CR>
+" 
+" " defmodule
+" nnoremap <silent><buffer> ]M m':call search('^\s*defmodule\>',"bW")<CR>
+" nnoremap <silent><buffer> [M m':call search('^\s*defmodule\>',"W")<CR>
+" xnoremap <silent><buffer> ]M m':<C-U>exe "normal! gv"<Bar>call search('^\s*defmodule\>', "bW")<CR>
+" xnoremap <silent><buffer> [M m':<C-U>exe "normal! gv"<Bar>call search('^\s*defmodule\>', "W")<CR>
+" 
+" " ... do
+" nnoremap <silent><buffer> ]m m':call search('^.*\s\+do\:\=\n', "bW")<CR>
+" nnoremap <silent><buffer> [m m':call search('^.*\s\+do\:\=\n', "W")<CR>
+" xnoremap <silent><buffer> ]m m':<C-U>exe "normal! gv"<Bar>call search('^.*\s\+do\:\=\n', "bW")<CR>
+" " BUG, GOES ON THE SAME LINE BECAUSE OF ^
+" xnoremap <silent><buffer> [m m':<C-U>exe "normal! gv"<Bar>call search('^.*\s\+do\:\=\n', "W")<CR>
+" 
+" " fn
+" nnoremap <silent><buffer> ]f m':call search('\<fn\>', "bW")<CR>
+" nnoremap <silent><buffer> [f m':call search('\<fn\>', "W")<CR>
+" xnoremap <silent><buffer> ]f m':<C-U>exe "normal! gv"<Bar>call search('\<fn\>', "bW")<CR>
+" xnoremap <silent><buffer> [f m':<C-U>exe "normal! gv"<Bar>call search('\<fn\>', "W")<CR>
 
 " Autogroup:
 augroup Elixir
