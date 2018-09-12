@@ -1,4 +1,12 @@
+" ==============================================================================
+" Info: {{{ 
+" ==============================================================================
+
+" Guide:
+" - " use tab for autocompletig snippets "
+
 " TODO
+" - " [], [[ plugin for remapping based on language "
 " - " create linters "
 " - " create session management "
 " - " custom welcome message "
@@ -74,96 +82,92 @@
 " " - Mappings "
 " ===============================================================================
 
+" ==============================================================================
+" Info }}}
+" ==============================================================================
 
 " ==============================================================================
 " Plugins: {{{ 
 " ==============================================================================
-set runtimepath+=/Users/bogdan/.cache/dein/repos/github.com/Shougo/dein.vim
-
-if dein#load_state('/Users/bogdan/.cache/dein')
-  call dein#begin('/Users/bogdan/.cache/dein')
-  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+call plug#begin('~/.vim/plugged')
 
   " Functionality Enhancements:
   " ============================================================================
   " surround
-  call dein#add('tpope/vim-surround')
+  Plug 'tpope/vim-surround'
   " commentary
-  call dein#add('tpope/vim-commentary')
+  Plug 'tpope/vim-commentary'
 
   " Languages_Support:
   " ============================================================================
-  call dein#add('https://github.com/sheerun/vim-polyglot')
+  Plug 'https://github.com/sheerun/vim-polyglot'
+  Plug 'vim-ruby/vim-ruby'
+  Plug 'elixir-editors/vim-elixir'
 
   " Themes:
   " ============================================================================
-  call dein#add('tomasr/molokai')
-  call dein#add('altercation/vim-colors-solarized')
+  Plug 'tomasr/molokai'
+  Plug 'altercation/vim-colors-solarized'
 
   " Linting:
   " ============================================================================
-  call dein#add('w0rp/ale')
+  Plug 'w0rp/ale'
   " * elixir: does not do syntax checking in elixir
 
   " Language_Server_Protocol:
   " ============================================================================
-  call dein#add('autozimu/LanguageClient-neovim', {
-       \ 'rev':'next',
-       \ 'build': 'bash install.sh',
-       \ })
+  Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': './install.sh',
+    \ }
 
   " Searching:
   " =============================================================================
 
   " Autocomplete:
   " ============================================================================
-  " call dein#add('Shougo/deoplete.nvim')
+  " Plug 'Shougo/deoplete.nvim'
   " deoplete sources
-  " call dein#add('Shougo/neco-vim')
+  " Plug 'Shougo/neco-vim'
   " auto pairing
-  call dein#add('Raimondi/delimitMate')
+  Plug 'Raimondi/delimitMate'
 
   " Snippets:
   " ============================================================================
   " necessary for deoplete elixir-ls snippets completion
-  call dein#add('SirVer/ultisnips')
+  Plug 'SirVer/ultisnips'
 
   " Testing:
   " ============================================================================
-  call dein#add('mhinz/vim-mix-format')
-  call dein#add('wikitopian/hardmode')
-  call dein#add('qstrahl/vim-dentures')
-  call dein#add('tpope/vim-endwise')
+  Plug 'mhinz/vim-mix-format'
+  Plug 'wikitopian/hardmode'
+  Plug 'qstrahl/vim-dentures'
+  Plug 'tpope/vim-endwise'
   " file exploration
-  call dein#add('scrooloose/nerdtree')
-  call dein#add('jeetsukumaran/vim-filebeagle')
+  Plug 'scrooloose/nerdtree'
+  Plug 'jeetsukumaran/vim-filebeagle'
   " fuzzy
-  call dein#add('/usr/local/opt/fzf')
-  call dein#add('junegunn/fzf.vim')
+  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf.vim'
 
   " ncm2
-  call dein#add('ncm2/ncm2')
-  call dein#add('roxma/nvim-yarp')
+  Plug 'ncm2/ncm2'
+  Plug 'roxma/nvim-yarp'
   
   " ncm2 sources
-  call dein#add('ncm2/ncm2-bufword')
+  Plug 'ncm2/ncm2-bufword'
   " ncm2 sources path
-  call dein#add('ncm2/ncm2-path')
+  Plug 'ncm2/ncm2-path'
 
   " nc2m sources vim
-  call dein#add('shougo/neco-vim')
-  call dein#add('ncm2/ncm2-vim')
+  Plug 'shougo/neco-vim'
+  Plug 'ncm2/ncm2-vim'
   " ncrm2 ??
-  call dein#add('ncm2/ncm2-ultisnips')
+  Plug 'ncm2/ncm2-ultisnips'
 
-  call dein#end()
-  call dein#save_state()
-endif
+call plug#end()
 
-" If you want to install not installed plugins on startup.
-if dein#check_install()
-  call dein#install()
-endif
+
 " ==============================================================================
 " Plugins }}}
 " ==============================================================================
