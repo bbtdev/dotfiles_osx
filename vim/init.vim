@@ -6,7 +6,7 @@
 " - " use tab for autocompletig snippets "
 
 " TODO
-" - " [], [[ plugin for remapping based on language "
+" - " [], [[ plugin/config for remapping based on language "
 " - " create linters "
 " - " create session management "
 " - " custom welcome message "
@@ -164,6 +164,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'ncm2/ncm2-vim'
   " ncrm2 ??
   Plug 'ncm2/ncm2-ultisnips'
+
+  " pasting
+  Plug 'junegunn/vim-peekaboo'
 
 call plug#end()
 
@@ -764,9 +767,10 @@ inoremap <expr> <Esc> pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
 " incompatible with endwise plugin
 " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 " compatible with endwise
-inoremap <expr> <silent> <CR> <SID>CRFixPuma()
+inoremap <expr> <silent> <CR> CRFixPuma()
 
-function! s:CRFixPuma()
+function! CRFixPuma()
+  echom "GIGI"
   return pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
 endfunction
 
