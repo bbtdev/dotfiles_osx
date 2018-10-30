@@ -1,95 +1,4 @@
 " ==============================================================================
-" Info: {{{ 
-" ==============================================================================
-
-" Guide:
-" - " use tab for autocompletig snippets "
-
-" TODO
-" - " loadview, mkview for filetypes, maybe set a global variable with these or
-"   exclude certain types"
-" - " map :mkview :loadview "
-" - " [], [[ plugin/config for remapping based on language "
-" - " create linters "
-" - " create session management "
-" - " custom welcome message "
-" - " replace grep "
-" - " implement project folder functionality "
-" - " fix <Esc> when pumvisible. Map to C-y<Esc>? "
-" - " learn what <exp> does "
-" - " check when dirvish introduces tree. Copy functionality from Nerdtree "
-" - " special keys for file explorer, finder, unmapped functions "
-" - " pastebin sites "
-" - " fuzzy search (buffer lines) word under cursor "
-" - " highlight(underline) variable automatically when hovering https://www.reddit.com/r/vim/comments/4h3oa2/how_to_automatically_underline_word_under_cursor/"
-" - " gist for plugin reviews, change the one with file explorers "
-" - " changes and jumps navigation "
-" - " maybe change ale with neomake"
-" - " :Jump function call CTRL-O or CTRL-i if negative or positive"
-" - " :Find a way to navigate :changes list "
-" - " replace tag navigation CTRL - ], CTRL T, CTRL W }, g ] "
-" - " use { } without affecting jump list with g'{, g'} "
-" - " integrate LSP with key bindings "
-" - " better K "
-" - " [* or [/ for navigating comments "
-" - " navigation with [[, ]], m[,]m, [] for multiple languages (inconsistencies
-"   between language support) "
-" - " show lsp tips hover in a baloon check
-"   https://www.reddit.com/r/vim/comments/97v0ix/how_do_people_use_vim_which_does_not_have_ide/e4bbbng/
-"   "
-
-" Rules:
-" taken from vimrc review threads
-" checklist: https://www.reddit.com/r/vim/wiki/vimrctips
-" - " don't change tabstop https://www.reddit.com/r/vim/wiki/tabstop "
-" - " 'clipboard^=' instead of '=', is more portable "
-" - " don't use smartindent "
-" - " 'filetype plugin indent on' - has to be set after loading plugins "
-" - " wrap your autocmds in proper self-clearing augroups "
-" - " 'set nocompatible' is usefull only when '-u', to avoid this use '-Nu' "
-" - " be specific in your mappings. nmap vs map "
-" - " avoid recursive mappings. nmap vs nnoremap "
-" - " don't 'set t_Co=256'; set up your terminal properly instead "
-" - " in scripts 'normal' should always be used as 'normal!' "
-" - " allow your functions to abort "
-" - " do not use 'source', use 'runtime' "
-" - " use long names to help readability: 'highlight' vs 'hi' "
-" - " 'set background' should be set by your colorscheme "
-" - " moving your custom functions to 'autoload/' "
-" - " move filetype-specific settings to 'after/ftplugin/' "
-" - " /\v breaks some plugins "
-" - " 'cursorline' and 'cursorcolumn' are documented as slow "
-" - " '~/.vim/' and '$HOME/.vim/' are not portable "
-" - " 'vnoremap' covers visual and select, for visual use 'xnoremap' "
-
-" Content:
-" ===============================================================================
-" " Plugins "
-" ===============================================================================
-" " Settings "
-" ------------------------------------------------------------------------------
-" " - Nvim Defaults "
-" " - General "
-" " - Autogroup "
-" ===============================================================================
-" " Mappings "
-" ------------------------------------------------------------------------------
-" " - Catalog "
-" " - Extended "
-" ===============================================================================
-" " Testing "
-" ------------------------------------------------------------------------------
-" " - Plugin Settings "
-" " - General Settings "
-" " - Functions "
-" " - Mappings "
-" ===============================================================================
-
-" ==============================================================================
-" Info }}}
-" ==============================================================================
-
-" ==============================================================================
 " Plugins: {{{ 
 " ==============================================================================
 call plug#begin('~/.vim/plugged')
@@ -112,61 +21,16 @@ call plug#begin('~/.vim/plugged')
   Plug 'tomasr/molokai'
   Plug 'altercation/vim-colors-solarized'
 
-  " Linting:
-  " ============================================================================
-  Plug 'w0rp/ale'
-  " * elixir: does not do syntax checking in elixir
-
-  " Language_Server_Protocol:
-  " ============================================================================
-  Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': './install.sh',
-    \ }
-
-  " Searching:
-  " =============================================================================
-
   " Autocomplete:
   " ============================================================================
-  " Plug 'Shougo/deoplete.nvim'
-  " deoplete sources
-  " Plug 'Shougo/neco-vim'
-  " auto pairing
   Plug 'Raimondi/delimitMate'
-
-  " Snippets:
-  " ============================================================================
-  " necessary for deoplete elixir-ls snippets completion
-  Plug 'SirVer/ultisnips'
 
   " Testing:
   " ============================================================================
-  Plug 'mhinz/vim-mix-format'
-  Plug 'wikitopian/hardmode'
   Plug 'qstrahl/vim-dentures'
-  Plug 'tpope/vim-endwise'
-  " file exploration
-  Plug 'scrooloose/nerdtree'
-  Plug 'jeetsukumaran/vim-filebeagle'
   " fuzzy
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
-
-  " ncm2
-  Plug 'ncm2/ncm2'
-  Plug 'roxma/nvim-yarp'
-  
-  " ncm2 sources
-  Plug 'ncm2/ncm2-bufword'
-  " ncm2 sources path
-  Plug 'ncm2/ncm2-path'
-
-  " nc2m sources vim
-  Plug 'shougo/neco-vim'
-  Plug 'ncm2/ncm2-vim'
-  " ncrm2 ??
-  Plug 'ncm2/ncm2-ultisnips'
 
   " pasting
   Plug 'junegunn/vim-peekaboo'
@@ -472,94 +336,12 @@ nnoremap gb :ls<CR>:b
 " Testing " Plugin Settings: {{{
 " ------------------------------------------------------------------------------
 
-" Mix Format:
-let g:mix_format_on_save = 1
-
-" Ncm2:
-augroup Nc2m
-autocmd!
- autocmd BufEnter * call ncm2#enable_for_buffer()
-augroup END
-
-set completeopt=noinsert,menuone,noselect
-
-" reduce popup flickerign, default: 60
-let g:ncm2#popup_delay = 60
-
-
-
-" UltiSnips+NCM function parameter expansion
-
-" We don't really want UltiSnips to map these two, but there's no option for
-" that so just make it map them to a <Plug> key.
-let g:UltiSnipsExpandTrigger       = "<Plug>(ultisnips_expand_or_jump)"
-let g:UltiSnipsJumpForwardTrigger  = "<Plug>(ultisnips_expand_or_jump)"
-" Let UltiSnips bind the jump backward trigger as there's nothing special
-" about it.
-let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
-
-" Try expanding snippet or jumping with UltiSnips and return <Tab> if nothing
-" worked.
-function! UltiSnipsExpandOrJumpOrTab()
-  call UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return ""
-  else
-    return "\<Tab>"
-  endif
-endfunction
-
-" First try expanding with ncm2_ultisnips. This does both LSP snippets and
-" normal snippets when there's a completion popup visible.
-inoremap <silent> <expr> <Tab> ncm2_ultisnips#expand_or("\<Plug>(ultisnips_try_expand)")
-
-" If that failed, try the UltiSnips expand or jump function. This handles
-" short snippets when the completion popup isn't visible yet as well as
-" jumping forward from the insert mode. Writes <Tab> if there is no special
-" action taken.
-inoremap <silent> <Plug>(ultisnips_try_expand) <C-R>=UltiSnipsExpandOrJumpOrTab()<CR>
-
-" Select mode mapping for jumping forward with <Tab>.
-snoremap <silent> <Tab> <Esc>:call UltiSnips#ExpandSnippetOrJump()<cr>
-
-
-" Deoplete:
-" " enable "
-" let g:deoplete#enable_at_startup = 1
-
-" LanguageClient_neovim:
-" " LSPs setup "
- let g:LanguageClient_serverCommands = {
-       \ 'elixir': ['elixir-ls'],
-       \ 'ruby': ['solargraph', 'stdio'],
-       \ 'sh': ['bash-language-server', 'start'],
-       \ }
-" " LSPs settings "
-let g:LanguageClient_autoStop = 1
- let g:LanguageClient_loadSettings = 1
- let g:LanguageClient_settingsPath =
-        \ ".vim/settings.json"
- let g:LanguageClient_diagnosticsList = "Disabled"
-" " debugging "
- let g:LanguageClient_loggingLevel='DEBUG'
- let g:LanguageClient_loggingFile='/Users/bogdan/Temp/LC.log'
-
-" ALE:
-" " linters setup "
-let g:ale_linters = {
-      \ 'elixir': ['credo'],
-      \ }
-
 " FZF:
 " let g:fzf_history_dir = '--history=$HOME/.fzf_history'
 
 "" Vimfiler:
 "" replace netrw
 "let g:vimfiler_as_default_explorer = 1
-
-" Newtr:
-let g:netrw_banner = 0
-let g:netrw_liststyle= 3
 
 " ------------------------------------------------------------------------------
 " }}}
@@ -578,75 +360,6 @@ set grepprg=rg\ --vimgrep
 " ------------------------------------------------------------------------------
 " Testing " Functions: {{{
 " ------------------------------------------------------------------------------
-" LSP Snippets Fix:
-" function! ExpandLspSnippet()
-"     call UltiSnips#ExpandSnippetOrJump()
-"     if !pumvisible() || empty(v:completed_item)
-"         return ''
-"     endif
-" 
-"     " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
-"     let l:value = v:completed_item['word']
-"     let l:matched = len(l:value)
-"     if l:matched <= 0
-"         return ''
-"     endif
-" 
-"     " remove inserted chars before expand snippet
-"     if col('.') == col('$')
-"         let l:matched -= 1
-"         exec 'normal! ' . l:matched . 'Xx'
-"     else
-"         exec 'normal! ' . l:matched . 'X'
-"     endif
-" 
-"     if col('.') == col('$') - 1
-"         " move to $ if at the end of line.
-"         call cursor(line('.'), col('$'))
-"     endif
-" 
-"     " expand snippet now.
-"     call UltiSnips#Anon(l:value)
-"     return ''
-" endfunction
-" 
-" imap <C-k> <C-R>=ExpandLspSnippet()<CR>
-
-" " HAS PROBLEMS WITH ESC "
-" " Autocmd LSP Snippet Fix:
-" let g:ulti_expand_res = 0 "default value, just set once
-" function! CompleteSnippet()
-"   if empty(v:completed_item)
-"     return
-"   endif
-" 
-"   call UltiSnips#ExpandSnippet()
-"   if g:ulti_expand_res > 0
-"     return
-"   endif
-"   
-"   let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
-"   let l:comp_len = len(l:complete)
-" 
-"   let l:cur_col = mode() == 'i' ? col('.') - 2 : col('.') - 1
-"   let l:cur_line = getline('.')
-" 
-"   let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
-"   let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
-" 
-"   call setline('.', l:start . l:end)
-"   call cursor('.', l:cur_col - l:comp_len + 2)
-" 
-"   call UltiSnips#Anon(l:complete)
-" endfunction
-" 
-" augroup lsp_snippet_fix
-"   autocmd!
-"   autocmd CompleteDone * call CompleteSnippet()
-" augroup END
-" 
-" Grep
-" command! -nargs=1 -complete=buffer Grep  execute "silent grep! <args>" | copen
 
 " ------------------------------------------------------------------------------
 " Testing " Functions }}}
@@ -662,47 +375,12 @@ let mapleader="\<Space>"
 
 " nnoremap <Leader>/ :Grep <C-R><C-W><CR>
 
-" Plugins:
-" " LanguageClient_Neovim "
-" menu
-nnoremap <Leader>lm :call LanguageClient_contextMenu()<CR>
-" K
-nnoremap <Leader>lk :call LanguageClient#textDocument_hover()<CR>
-" definition
-nnoremap <Leader>ld :call LanguageClient#textDocument_definition({
-      \ 'gotoCmd': 'split',
-      \})<CR>
-
-" Nerdtree:
-nnoremap <Leader>ft :NERDTreeToggle<CR>
-nnoremap <Leader>ff :NERDTreeFind<CR>
-" Filebeagle:
-nnoremap <Leader>fe :FileBeagleBufferDir<CR>
-
 " " FZF "
 nnoremap <C-p> :FZF<CR>
 nnoremap <Leader>g :Ag<CR>
 nnoremap <Leader>/ :BLines<CR>
 nnoremap <Leader>p :Buffers<CR>
 nnoremap <Leader>h :History<CR>
-
-" how to open from fuzzy
-let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
-      \ 'ctrl-s': 'split',
-      \ 'ctrl-v': 'vsplit' }
-
-" " " Vimfiler "
-" nnoremap <Leader>fl :VimFilerExplorer<CR>
-" nnoremap <Leader>fe :Explore<CR>
-" " " Unite "
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-" nnoremap <C-p> :Unite<CR>
-" let g:unite_source_rec_async_command =
-"       \ ['ag', '--follow', '--nocolor', '--nogroup',
-"       \  '--hidden', '-g', '']
-" let g:unite_source_grep_command = 'ag'
-" let g:unite_source_grep_default_opts = '-i --vimgrep --nocolor --nogroup --hidden '
 
 " Unmapped:
 xnoremap <Leader>vs :sort<CR>
@@ -795,10 +473,6 @@ augroup TestAutogroup
 
   " hardmode enable
   " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
-
-  " consistent folds
-  " autocmd BufWinLeave *.rb,*.ex,*.exs mkview
-  " autocmd BufWinEnter  *.rb,*.ex,*.exs silent! loadview
 augroup END
 
 " ------------------------------------------------------------------------------
